@@ -1,26 +1,26 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="地址名称" prop="addressName">
+      <el-form-item label="父id" prop="pid">
         <el-input
-          v-model="queryParams.addressName"
-          placeholder="请输入地址名称"
+          v-model="queryParams.pid"
+          placeholder="请输入父id"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="区" prop="county">
+      <el-form-item label="名称" prop="name">
         <el-input
-          v-model="queryParams.county"
-          placeholder="请输入区"
+          v-model="queryParams.name"
+          placeholder="请输入名称"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="${comment}" prop="uid">
+      <el-form-item label="等级" prop="level">
         <el-input
-          v-model="queryParams.uid"
-          placeholder="请输入${comment}"
+          v-model="queryParams.level"
+          placeholder="请输入等级"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -39,7 +39,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['shop:buyerAddress:add']"
+          v-hasPermi="['shop:city:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -50,7 +50,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['shop:buyerAddress:edit']"
+          v-hasPermi="['shop:city:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -61,7 +61,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['shop:buyerAddress:remove']"
+          v-hasPermi="['shop:city:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -71,23 +71,18 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['shop:buyerAddress:export']"
+          v-hasPermi="['shop:city:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="buyerAddressList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="cityList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="地址ID" align="center" prop="addressId" />
-      <el-table-column label="地址名称" align="center" prop="addressName" />
-      <el-table-column label="顺序号" align="center" prop="seqNumber" />
-      <el-table-column label="省" align="center" prop="province" />
-      <el-table-column label="市" align="center" prop="city" />
-      <el-table-column label="区" align="center" prop="county" />
-      <el-table-column label="街道" align="center" prop="street" />
-      <el-table-column label="门牌号" align="center" prop="lastDetail" />
-      <el-table-column label="${comment}" align="center" prop="uid" />
+      <el-table-column label="id" align="center" prop="id" />
+      <el-table-column label="父id" align="center" prop="pid" />
+      <el-table-column label="名称" align="center" prop="name" />
+      <el-table-column label="等级" align="center" prop="level" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -95,14 +90,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['shop:buyerAddress:edit']"
+            v-hasPermi="['shop:city:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['shop:buyerAddress:remove']"
+            v-hasPermi="['shop:city:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -116,23 +111,17 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改地址对话框 -->
+    <!-- 添加或修改城市对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="地址名称" prop="addressName">
-          <el-input v-model="form.addressName" placeholder="请输入地址名称" />
+        <el-form-item label="父id" prop="pid">
+          <el-input v-model="form.pid" placeholder="请输入父id" />
         </el-form-item>
-        <el-form-item label="区" prop="county">
-          <el-input v-model="form.county" placeholder="请输入区" />
+        <el-form-item label="名称" prop="name">
+          <el-input v-model="form.name" placeholder="请输入名称" />
         </el-form-item>
-        <el-form-item label="街道" prop="street">
-          <el-input v-model="form.street" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="门牌号" prop="lastDetail">
-          <el-input v-model="form.lastDetail" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="${comment}" prop="uid">
-          <el-input v-model="form.uid" placeholder="请输入${comment}" />
+        <el-form-item label="等级" prop="level">
+          <el-input v-model="form.level" placeholder="请输入等级" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -144,10 +133,10 @@
 </template>
 
 <script>
-import { listBuyerAddress, getBuyerAddress, delBuyerAddress, addBuyerAddress, updateBuyerAddress } from "@/api/shop/buyerAddress";
+import { listCity, getCity, delCity, addCity, updateCity } from "@/api/shop/city";
 
 export default {
-  name: "BuyerAddress",
+  name: "City",
   data() {
     return {
       // 遮罩层
@@ -162,8 +151,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 地址表格数据
-      buyerAddressList: [],
+      // 城市表格数据
+      cityList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -172,14 +161,9 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        addressName: null,
-        seqNumber: null,
-        province: null,
-        city: null,
-        county: null,
-        street: null,
-        lastDetail: null,
-        uid: null
+        pid: null,
+        name: null,
+        level: null
       },
       // 表单参数
       form: {},
@@ -192,11 +176,11 @@ export default {
     this.getList();
   },
   methods: {
-    /** 查询地址列表 */
+    /** 查询城市列表 */
     getList() {
       this.loading = true;
-      listBuyerAddress(this.queryParams).then(response => {
-        this.buyerAddressList = response.rows;
+      listCity(this.queryParams).then(response => {
+        this.cityList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
@@ -209,20 +193,10 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        addressId: null,
-        addressName: null,
-        seqNumber: null,
-        province: null,
-        city: null,
-        county: null,
-        street: null,
-        lastDetail: null,
-        revision: null,
-        createdBy: null,
-        createdTime: null,
-        updatedBy: null,
-        updatedTime: null,
-        uid: null
+        id: null,
+        pid: null,
+        name: null,
+        level: null
       };
       this.resetForm("form");
     },
@@ -238,7 +212,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.addressId)
+      this.ids = selection.map(item => item.id)
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
@@ -246,30 +220,30 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加地址";
+      this.title = "添加城市";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const addressId = row.addressId || this.ids
-      getBuyerAddress(addressId).then(response => {
+      const id = row.id || this.ids
+      getCity(id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改地址";
+        this.title = "修改城市";
       });
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.addressId != null) {
-            updateBuyerAddress(this.form).then(response => {
+          if (this.form.id != null) {
+            updateCity(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addBuyerAddress(this.form).then(response => {
+            addCity(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -280,9 +254,9 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const addressIds = row.addressId || this.ids;
-      this.$modal.confirm('是否确认删除地址编号为"' + addressIds + '"的数据项？').then(function() {
-        return delBuyerAddress(addressIds);
+      const ids = row.id || this.ids;
+      this.$modal.confirm('是否确认删除城市编号为"' + ids + '"的数据项？').then(function() {
+        return delCity(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -290,9 +264,9 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('shop/buyerAddress/export', {
+      this.download('shop/city/export', {
         ...this.queryParams
-      }, `buyerAddress_${new Date().getTime()}.xlsx`)
+      }, `city_${new Date().getTime()}.xlsx`)
     }
   }
 };

@@ -45,14 +45,14 @@
 		}, {
 			"path": "pages/order/success",
 			"style": {
-				"navigationBarTitleText": "success",
+				"navigationBarTitleText": "支付成功",
 				"enablePullDownRefresh": true
 			}
 
 		}, {
 			"path": "pages/order/fail",
 			"style": {
-				"navigationBarTitleText": "fail",
+				"navigationBarTitleText": "支付失败",
 				"enablePullDownRefresh": true
 			}
 

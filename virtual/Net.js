@@ -17,12 +17,12 @@ const orderDetail = "/dev-api/order/buyerOrder"; //
 const perfectOrder =  "/dev-api/order/buyerPayment"; //  完成订单
 const paymentOrder =base+ "user.order/pay"; //  订单下单
 
-const address =base+ "address/lists"; //  地址
-const addAddress =base+ "address/add"; //  地址
-const delAddress = base+"address/remove"; //  地址
-const stateAddress =base+ "address/state"; //  地址
+const address =base+ "buyerAddress/list"; //  地址
+const addAddress =base+ "buyerAddress"; //  地址
+const delAddress = base+"buyerAddress"; //  地址
+const stateAddress =base+ "buyerAddress"; //  地址
 
-const getRegion = base+"address/getRegion"; //区域
+const getRegion = base+"city/list"; //区域
 
 const wxSession =base+ "wxapp/session"; //区域
 const loginin = "/dev-api/auth/mlogin"; //
@@ -100,7 +100,7 @@ const upload = (ret, chooseImageRes) => {
 			'user': 'test'
 		},
 		success: (uploadFileRes) => {
-			console.log(uploadFileRes.data);
+			// console.log(uploadFileRes.data);
 			ret(JSON.parse(uploadFileRes.data));
 		}
 	});
@@ -108,10 +108,10 @@ const upload = (ret, chooseImageRes) => {
 
 
 const fetch = (ret, address, param, method = 'GET') => {
-	console.log(param)
+	// console.log(param)
 
 	var info = uni.getStorageSync("info");
-	console.log(info);
+	// console.log(info);
 	var infoJ = {};
 	try {
 		if (info != undefined) {
@@ -163,7 +163,7 @@ const fetch = (ret, address, param, method = 'GET') => {
 			} else {
 
 				if (res.data.code == 200) {
-					console.log(res.data);
+					// console.log(res.data);
 					ret(res.data);
 				}else if(res.data.msg=='无效的token'){
 					uni.navigateTo({
@@ -181,7 +181,7 @@ const fetch = (ret, address, param, method = 'GET') => {
 
 		},
 		fail: (res) => {
-			console.log(res.data);
+			// console.log(res.data);
 
 			uni.navigateTo({
 				url: '/pages/public/login'

@@ -1,30 +1,31 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="地址名称" prop="addressName">
+      <el-form-item label="路径" prop="url">
         <el-input
-          v-model="queryParams.addressName"
-          placeholder="请输入地址名称"
+          v-model="queryParams.url"
+          placeholder="请输入路径"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="区" prop="county">
+      <el-form-item label="名称" prop="name">
         <el-input
-          v-model="queryParams.county"
-          placeholder="请输入区"
+          v-model="queryParams.name"
+          placeholder="请输入名称"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="${comment}" prop="uid">
+      <el-form-item label="本地api" prop="local">
         <el-input
-          v-model="queryParams.uid"
-          placeholder="请输入${comment}"
+          v-model="queryParams.local"
+          placeholder="请输入本地api"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -39,7 +40,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['shop:buyerAddress:add']"
+          v-hasPermi="['shop:payCommitFormate:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -50,7 +51,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['shop:buyerAddress:edit']"
+          v-hasPermi="['shop:payCommitFormate:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -61,7 +62,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['shop:buyerAddress:remove']"
+          v-hasPermi="['shop:payCommitFormate:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -71,23 +72,21 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['shop:buyerAddress:export']"
+          v-hasPermi="['shop:payCommitFormate:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="buyerAddressList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="payCommitFormateList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="地址ID" align="center" prop="addressId" />
-      <el-table-column label="地址名称" align="center" prop="addressName" />
-      <el-table-column label="顺序号" align="center" prop="seqNumber" />
-      <el-table-column label="省" align="center" prop="province" />
-      <el-table-column label="市" align="center" prop="city" />
-      <el-table-column label="区" align="center" prop="county" />
-      <el-table-column label="街道" align="center" prop="street" />
-      <el-table-column label="门牌号" align="center" prop="lastDetail" />
-      <el-table-column label="${comment}" align="center" prop="uid" />
+      <el-table-column label="编号" align="center" prop="id" />
+      <el-table-column label="路径" align="center" prop="url" />
+      <el-table-column label="名称" align="center" prop="name" />
+      <el-table-column label="格式" align="center" prop="formate" />
+      <el-table-column label="格式描述" align="center" prop="formateDesc" />
+      <el-table-column label="本地api" align="center" prop="local" />
+      <el-table-column label="状态" align="center" prop="status" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -95,19 +94,19 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['shop:buyerAddress:edit']"
+            v-hasPermi="['shop:payCommitFormate:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['shop:buyerAddress:remove']"
+            v-hasPermi="['shop:payCommitFormate:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -116,24 +115,25 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改地址对话框 -->
+    <!-- 添加或修改求购商品格式对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="地址名称" prop="addressName">
-          <el-input v-model="form.addressName" placeholder="请输入地址名称" />
+        <el-form-item label="路径" prop="url">
+          <el-input v-model="form.url" placeholder="请输入路径" />
         </el-form-item>
-        <el-form-item label="区" prop="county">
-          <el-input v-model="form.county" placeholder="请输入区" />
+        <el-form-item label="名称" prop="name">
+          <el-input v-model="form.name" placeholder="请输入名称" />
         </el-form-item>
-        <el-form-item label="街道" prop="street">
-          <el-input v-model="form.street" type="textarea" placeholder="请输入内容" />
+        <el-form-item label="格式" prop="formate">
+          <el-input v-model="form.formate" type="textarea" placeholder="请输入内容" />
         </el-form-item>
-        <el-form-item label="门牌号" prop="lastDetail">
-          <el-input v-model="form.lastDetail" type="textarea" placeholder="请输入内容" />
+        <el-form-item label="格式描述" prop="formateDesc">
+          <el-input v-model="form.formateDesc" type="textarea" placeholder="请输入内容" />
         </el-form-item>
-        <el-form-item label="${comment}" prop="uid">
-          <el-input v-model="form.uid" placeholder="请输入${comment}" />
+        <el-form-item label="本地api" prop="local">
+          <el-input v-model="form.local" placeholder="请输入本地api" />
         </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -144,10 +144,10 @@
 </template>
 
 <script>
-import { listBuyerAddress, getBuyerAddress, delBuyerAddress, addBuyerAddress, updateBuyerAddress } from "@/api/shop/buyerAddress";
+import { listPayCommitFormate, getPayCommitFormate, delPayCommitFormate, addPayCommitFormate, updatePayCommitFormate } from "@/api/shop/payCommitFormate";
 
 export default {
-  name: "BuyerAddress",
+  name: "PayCommitFormate",
   data() {
     return {
       // 遮罩层
@@ -162,8 +162,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 地址表格数据
-      buyerAddressList: [],
+      // 求购商品格式表格数据
+      payCommitFormateList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -172,14 +172,13 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        addressName: null,
-        seqNumber: null,
-        province: null,
-        city: null,
-        county: null,
-        street: null,
-        lastDetail: null,
-        uid: null
+        url: null,
+        name: null,
+        formate: null,
+        formateDesc: null,
+        local: null,
+        status: null,
+        rate: null
       },
       // 表单参数
       form: {},
@@ -192,11 +191,11 @@ export default {
     this.getList();
   },
   methods: {
-    /** 查询地址列表 */
+    /** 查询求购商品格式列表 */
     getList() {
       this.loading = true;
-      listBuyerAddress(this.queryParams).then(response => {
-        this.buyerAddressList = response.rows;
+      listPayCommitFormate(this.queryParams).then(response => {
+        this.payCommitFormateList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
@@ -209,20 +208,14 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        addressId: null,
-        addressName: null,
-        seqNumber: null,
-        province: null,
-        city: null,
-        county: null,
-        street: null,
-        lastDetail: null,
-        revision: null,
-        createdBy: null,
-        createdTime: null,
-        updatedBy: null,
-        updatedTime: null,
-        uid: null
+        id: null,
+        url: null,
+        name: null,
+        formate: null,
+        formateDesc: null,
+        local: null,
+        status: 0,
+        rate: null
       };
       this.resetForm("form");
     },
@@ -238,7 +231,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.addressId)
+      this.ids = selection.map(item => item.id)
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
@@ -246,30 +239,30 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加地址";
+      this.title = "添加求购商品格式";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const addressId = row.addressId || this.ids
-      getBuyerAddress(addressId).then(response => {
+      const id = row.id || this.ids
+      getPayCommitFormate(id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改地址";
+        this.title = "修改求购商品格式";
       });
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.addressId != null) {
-            updateBuyerAddress(this.form).then(response => {
+          if (this.form.id != null) {
+            updatePayCommitFormate(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addBuyerAddress(this.form).then(response => {
+            addPayCommitFormate(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -280,9 +273,9 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const addressIds = row.addressId || this.ids;
-      this.$modal.confirm('是否确认删除地址编号为"' + addressIds + '"的数据项？').then(function() {
-        return delBuyerAddress(addressIds);
+      const ids = row.id || this.ids;
+      this.$modal.confirm('是否确认删除求购商品格式编号为"' + ids + '"的数据项？').then(function() {
+        return delPayCommitFormate(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -290,9 +283,9 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('shop/buyerAddress/export', {
+      this.download('shop/payCommitFormate/export', {
         ...this.queryParams
-      }, `buyerAddress_${new Date().getTime()}.xlsx`)
+      }, `payCommitFormate_${new Date().getTime()}.xlsx`)
     }
   }
 };
