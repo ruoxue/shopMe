@@ -79,6 +79,34 @@ const getType=(status)=>{//商品类型 1:实物 2:虚拟商品 3:电子卡密4 
 	
 	
 }
+
+
+const getOrderStatus=(status,type)=>{
+	if(status==0){
+		return '待付款';
+	}else if(status==10){
+		if(type==4){
+			return '已提交/待收货';
+		}else{
+			return '已付款/待发货';
+		}
+	}else if(status==100){
+		if(type==4){
+			return '已完成/待打款';
+		}else{
+			return '已付款/待收货';
+		}
+		
+	}else if(status==1000){
+		return '已付款/待评价';
+	}else if(status==-1){
+		return '退款/售后';
+	} else{
+		return '未知状态';
+	}
+	
+	
+}
 const getNowDate=(addDay)=> {
       const timeOne = new Date()
 	  timeOne.setDate(timeOne.getDate() + addDay);
@@ -247,6 +275,7 @@ export default {
 	buyerOrder,
 	getPayChannel,
 	paymentSaleOrder,
-	getType
+	getType,
+	getOrderStatus
 
 }

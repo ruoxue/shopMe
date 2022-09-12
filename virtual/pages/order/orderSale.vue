@@ -2,10 +2,10 @@
 	<view>
 		<view class="text-center flex cu-bar">
 			<scroll-view scroll-x class="bg-white nav text-center">
-				<view class="cu-item flex-sub" :class="'all' == dataType ? 'text-red cur' : 'all'" @click="tabSelect" id="all">全部订单</view>
-				<view class="cu-item flex-sub" @click="tabSelect" :class="'payment' == dataType ? 'text-red cur' : 'payment'" id="payment">待付款</view>
-				<view class="cu-item flex-sub" @click="tabSelect" :class="'delivery' == dataType ? 'text-red cur' : ''" id="delivery">待发货</view>
-				<view class="cu-item flex-sub" @click="tabSelect" :class="'received' == dataType ? 'text-red cur' : ''" id="received">待收货</view>
+				<view class="cu-item flex-sub" :class="'' == dataType ? 'text-red cur' : ''" @click="tabSelect" id="">全部订单</view>
+				<view class="cu-item flex-sub" @click="tabSelect" :class=" '0' == dataType ? 'text-red cur' : ''" id='0'>待付款</view>
+				<view class="cu-item flex-sub" @click="tabSelect" :class="'10' == dataType ? 'text-red cur' : ''" id="10">待发货</view>
+				<view class="cu-item flex-sub" @click="tabSelect" :class="'100' == dataType ? 'text-red cur' : ''" id="100">待收货</view>
 			</scroll-view>
 		</view>
 
@@ -33,13 +33,9 @@
 								<text class="text-price text-red" >{{ item.totalPrice }}</text>
 							</view>
 
-							<view class="content margin-top-xs margin-bottom-xs padding-sm align-center">
-								<!-- 订单状态: {{item.order_status.text}}
-								付款状态: {{item.pay_status.text}}
-								发货状态: {{item.receipt_status.text}} -->
-							 
+							<view class="content margin-top-xs text-sm  fr margin-bottom-xs padding-sm align-center">
+								 {{$net.getOrderStatus(item.orderStatus,item.type)}}
 
-								<text @click.stop="pay" :id="item.order_id" class="text-white fr padding-xs  bg-red" v-if="item.pay_status == 10">去付款</text>
 							</view>
 						</view>
 					</view>
@@ -57,7 +53,7 @@ export default {
 		return {
 			waterfall: '',
 			list: [],
-			dataType: 'all',
+			dataType: '',
 			_isEnded: false,
 			pageNum: 1,
 			pageSize:10

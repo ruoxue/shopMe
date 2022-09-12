@@ -36,7 +36,7 @@
 													<view class="cu-avatar"
 														:style="'background-image: url(' + childerItems.thumb + ');'">
 													</view>
-													<view class="content ">
+													<view class="content margin-top-sm text-xl ">
 														<view class="text-black">{{ childerItems.name }}</view>
 													</view>
 												</navigator>

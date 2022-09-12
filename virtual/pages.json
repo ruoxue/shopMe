@@ -188,7 +188,7 @@
             "path" : "pages/order/orderSale",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "售出订单",
                 "enablePullDownRefresh": false
             }
             

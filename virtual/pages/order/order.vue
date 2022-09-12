@@ -2,10 +2,10 @@
 	<view>
 		<view class="text-center flex cu-bar">
 			<scroll-view scroll-x class="bg-white nav text-center">
-				<view class="cu-item flex-sub" :class="'all' == dataType ? 'text-red cur' : 'all'" @click="tabSelect" id="all">全部订单</view>
-				<view class="cu-item flex-sub" @click="tabSelect" :class="'payment' == dataType ? 'text-red cur' : 'payment'" id="payment">待付款</view>
-				<view class="cu-item flex-sub" @click="tabSelect" :class="'delivery' == dataType ? 'text-red cur' : ''" id="delivery">待发货</view>
-				<view class="cu-item flex-sub" @click="tabSelect" :class="'received' == dataType ? 'text-red cur' : ''" id="received">待收货</view>
+				<view class="cu-item flex-sub" :class="'' == dataType ? 'text-red cur' : ''" @click="tabSelect" id="">全部订单</view>
+				<view class="cu-item flex-sub" @click="tabSelect" :class="'0' == dataType ? 'text-red cur' : '0'" id="0">待付款</view>
+				<view class="cu-item flex-sub" @click="tabSelect" :class="'10' == dataType ? 'text-red cur' : ''" id="10">待发货</view>
+				<view class="cu-item flex-sub" @click="tabSelect" :class="'100' == dataType ? 'text-red cur' : ''" id="100">待收货</view>
 			</scroll-view>
 		</view>
 
@@ -20,7 +20,7 @@
 								<text class="uni-ellipsis-2">订单号:{{ item.orderId }}</text>
 							</view>
 							<view>
-								<text class="uni-tag hot-tag">{{ item.goods_tip }}</text>
+								<!-- <text class="uni-tag hot-tag">{{ item.goods_tip }}</text> -->
 							</view>
 						</view>
 						<view>
@@ -34,12 +34,9 @@
 							</view>
 
 							<view class="content margin-top-xs margin-bottom-xs padding-sm align-center">
-								<!-- 订单状态: {{item.order_status.text}}
-								付款状态: {{item.pay_status.text}}
-								发货状态: {{item.receipt_status.text}} -->
-							 
+								 {{$net.getOrderStatus(item.orderStatus,item.type)}} 
 
-								<text @click.stop="pay" :id="item.order_id" class="text-white fr padding-xs  bg-red" v-if="item.pay_status == 10">去付款</text>
+								<text @click.stop="pay" :id="item.orderId" class="text-white fr padding-xs  bg-red" v-if="item.orderStatus == 0">去付款</text>
 							</view>
 						</view>
 					</view>
@@ -57,7 +54,7 @@ export default {
 		return {
 			waterfall: '',
 			list: [],
-			dataType: 'all',
+			dataType: '',
 			_isEnded: false,
 			pageNum: 1,
 			pageSize:10
@@ -83,10 +80,10 @@ export default {
 		loadData() {
 			var thus = this;
 			this.$net.fetch(
-				function(ret) {
+				function(r) {
 				 
-					thus.list = thus.list.concat(ret.rows);
-					if(r.total<=thus.dataList.length){
+					thus.list = thus.list.concat(r.rows);
+					if(r.total<=thus.list.length){
 					  thus._isEnded=true;
 					}else{
 					 thus._isEnded=false;

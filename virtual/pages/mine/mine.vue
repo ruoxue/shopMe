@@ -22,19 +22,19 @@
 
 					<view class="cu-list grid col-4">
 						<view class="cu-item">
-							<navigator url="../order/order?id=all" class="cuIcon-text text-red"><text
+							<navigator url="../order/order?id=" class="cuIcon-text text-red"><text
 									class="text-black">我的订单</text></navigator>
 						</view>
 						<view class="cu-item">
-							<navigator url="../order/order?id=payment" class="cuIcon-pay text-red"><text
+							<navigator url="../order/order?id=0" class="cuIcon-pay text-red"><text
 									class="text-black">待付款</text></navigator>
 						</view>
 						<view class="cu-item">
-							<navigator url="../order/order?id=delivery" class="cuIcon-send text-red"><text
+							<navigator url="../order/order?id=10" class="cuIcon-send text-red"><text
 									class="text-black">待发货</text></navigator>
 						</view>
 						<view class="cu-item">
-							<navigator url="../order/order?id=received" class="cuIcon-safe text-red"><text
+							<navigator url="../order/order?id=100" class="cuIcon-safe text-red"><text
 									class="text-black">待收货</text></navigator>
 						</view>
 
@@ -42,7 +42,7 @@
 				</view>
 				<view class="cu-list menu margin-top-xl">
 					<view class="cu-item arrow">
-						<navigator class="content" url="/pages/order/orderSale" hover-class="none">
+						<navigator class="content" url="/pages/order/orderSale?id=" hover-class="none">
 							<text class="cuIcon-addressbook text-gray"></text>
 							<text class="text-grey">售出订单</text>
 						</navigator>
