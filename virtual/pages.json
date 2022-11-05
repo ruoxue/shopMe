@@ -43,7 +43,7 @@
 			}
 
 		}, {
-			"path": "pages/order/success",
+			"path": "pages/order/result",
 			"style": {
 				"navigationBarTitleText": "支付成功",
 				"enablePullDownRefresh": true

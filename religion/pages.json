@@ -1,0 +1,273 @@
+{
+	"pages": [{
+			"path": "pages/home/home",
+			"style": {
+				"enablePullDownRefresh": true,
+				"navigationBarTitleText": "通知公告"
+			}
+
+		}, {
+			"path": "pages/cate/cate",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTitleText": "信息登记"
+
+			}
+
+		}, {
+			"path": "pages/cart/cart",
+			"style": {
+				"enablePullDownRefresh": true,
+				"navigationBarTitleText": "购物车"
+			}
+
+		}, {
+			"path": "pages/mine/mine",
+			"style": {
+				"enablePullDownRefresh": true,
+				"navigationBarTitleText": "学习辅助"
+			}
+
+		}, {
+			"path": "pages/help/help",
+			"style": {
+				"navigationBarTitleText": "帮助中心",
+				"enablePullDownRefresh": true
+			}
+
+		}, {
+			"path": "pages/order/order",
+			"style": {
+				"navigationBarTitleText": "订单管理",
+				"enablePullDownRefresh": true
+			}
+
+		}, {
+			"path": "pages/order/result",
+			"style": {
+				"navigationBarTitleText": "支付成功",
+				"enablePullDownRefresh": true
+			}
+
+		}, {
+			"path": "pages/order/fail",
+			"style": {
+				"navigationBarTitleText": "支付失败",
+				"enablePullDownRefresh": true
+			}
+
+		}, {
+			"path": "pages/address/address",
+			"style": {
+				"navigationBarTitleText": "收货地址",
+				"enablePullDownRefresh": true
+			}
+
+		},
+		{
+			"path": "pages/address/add",
+			"style": {
+				"navigationBarTitleText": "新增收货地址",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/goods/goods",
+			"style": {
+				"navigationBarTitleText": "商品列表",
+				"enablePullDownRefresh": true
+			}
+
+		},
+		// {
+		// 	"path": "pages/detail/detail",
+		// 	"style": {
+		// 		"navigationBarTitleText": "商品详情",
+		// 		"enablePullDownRefresh": true
+		// 	}
+
+		// },
+		{
+			"path": "pages/order/pay",
+			"style": {
+				"navigationBarTitleText": "订单处理",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "登录",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/login/regedit",
+			"style": {
+				"navigationBarTitleText": "注册",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/invited/invited",
+			"style": {
+				"navigationBarTitleText": "我的邀请人",
+				"enablePullDownRefresh": true
+			}
+
+		},
+		{
+			"path": "pages/invited/bind",
+			"style": {
+				"navigationBarTitleText": "绑定邀请人",
+				"enablePullDownRefresh": true
+			}
+
+		},
+		{
+			"path": "pages/order/detail",
+			"style": {
+				"navigationBarTitleText": "订单详情",
+				"enablePullDownRefresh": false
+			}
+
+		},
+		{
+			"path": "pages/help/news",
+			"style": {
+				"navigationBarTitleText": "文章详情",
+				"enablePullDownRefresh": true
+			}
+
+		},
+		{
+			"path": "pages/help/like",
+			"style": {
+				"navigationBarTitleText": "我的喜欢",
+				"enablePullDownRefresh": true
+			}
+
+		},
+		{
+			"path": "pages/help/favor",
+			"style": {
+				"navigationBarTitleText": "我的收藏",
+				"enablePullDownRefresh": true
+			}
+
+		},
+		{
+			"path": "pages/help/history",
+			"style": {
+				"navigationBarTitleText": "浏览记录",
+				"enablePullDownRefresh": true
+			}
+
+		}
+
+
+
+
+
+		, {
+			"path": "pages/sale/sale",
+			"style": {
+				"navigationBarTitleText": "日常检查",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/detail/index",
+			"style": {
+				"navigationBarTitleText": "详情",
+				"enablePullDownRefresh": false
+			}
+
+		},
+		
+		{
+			"path": "pages/religionBuilding/index"
+		},
+		
+		{
+			"path": "pages/religionBuilding/edit"
+		}
+	    ,{
+            "path" : "pages/order/orderSale",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "售出订单",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/address/a/a",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
+	"globalStyle": {
+		"navigationBarTextStyle": "white",
+		"navigationBarTitleText": "恰饭",
+		"navigationBarBackgroundColor": "#f00",
+		"backgroundColor": "#f00"
+	},
+	"tabBar": {
+		"borderStyle": "black",
+		"backgroundColor": "#FFFFFF",
+		"color": "#000",
+		"selectedColor": "#f00",
+		"list": [{
+				"pagePath": "pages/home/home",
+				"iconPath": "static/img/tabbar/home.png",
+				"selectedIconPath": "static/img/tabbar/home_on.png",
+				"text": "通知公告"
+			},
+			{
+				"pagePath": "pages/cate/cate",
+				"iconPath": "static/img/tabbar/cate.png",
+				"selectedIconPath": "static/img/tabbar/cate_on.png",
+				"text": "信息登记"
+			},
+
+			{
+				"pagePath": "pages/sale/sale",
+				"iconPath": "static/img/tabbar/cart.png",
+				"selectedIconPath": "static/img/tabbar/cart_on.png",
+				"text": "日常检查"
+			},
+			// //#ifdef MP-WEIXIN
+			// {
+			// 	"pagePath": "pages/index/index",
+			// 	"iconPath": "static/img/tabbar/add.png",
+			// 	"selectedIconPath": "static/img/tabbar/addactive.png",
+			// 	"text": "发布"
+			// },
+			// //#endif
+			// //#ifndef MP-WEIXIN
+			// {
+			// 	"pagePath": "pages/index/index",
+			// 	"iconPath": "static/img/tabbar/add.png",
+			// 	"selectedIconPath": "static/img/tabbar/addactive.png"
+			// },
+			// //#endif
+			// {
+			// 	"pagePath": "pages/cart/cart",
+			// 	"iconPath": "static/img/tabbar/cart.png",
+			// 	"selectedIconPath": "static/img/tabbar/cart_on.png",
+			// 	"text": "购物车"
+			// },
+			{
+				"pagePath": "pages/mine/mine",
+				"iconPath": "static/img/tabbar/user.png",
+				"selectedIconPath": "static/img/tabbar/user_on.png",
+				"text": "学习辅助"
+			}
+		]
+	}
+}

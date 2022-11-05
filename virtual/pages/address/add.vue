@@ -57,10 +57,12 @@
 		onLoad(option) {
 
 			var id = option.id
-			
-			
-			try{this.address = JSON.parse(id);}catch(e){}
-			
+
+
+			try {
+				this.address = JSON.parse(id);
+			} catch (e) {}
+
 			this.address.region =
 				this.address == undefined || this.address.region == undefined ? "选择地址" : this.address.region;
 
@@ -81,7 +83,7 @@
 
 
 			},
-			upData(e) { 
+			upData(e) {
 				this.address.value = e.value.join(",");
 				this.address.region = e.region;
 				this.address.province = e.provinceCode;
@@ -116,7 +118,7 @@
 
 					},
 					this.$net.addAddress,
-					this.address, 
+					this.address,
 					this.address.addressId == undefined ? 'post' : 'put');
 			},
 

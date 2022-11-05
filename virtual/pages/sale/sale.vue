@@ -66,10 +66,13 @@
 			</view>
 			<view class="cu-form-group margin-top">
 				<view class="title">详情</view>
-				
-				<textarea v-model="form.content"></textarea> 
-			</view>
 
+				<textarea v-model="form.content"></textarea>
+			</view>
+			<view class="cu-form-group margin-top">
+				<view class="title">详情</view> 
+  
+			</view>
 		</form>
 
 
