@@ -70,6 +70,12 @@ export const constantRoutes = [
     component: () => import('@/views/error/401'),
     hidden: true
   },
+  
+  {
+    path: '/visitor',
+    component: () => import('@/views/phone/tPhoneVisitor/add'),
+    hidden: true
+  },
   {
     path: '',
     component: Layout,

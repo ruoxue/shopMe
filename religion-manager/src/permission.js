@@ -22,7 +22,9 @@ const whiteList = ['/login',
   '/register',
   '/index_screen',
   '/big/religionSacrifice',
-  '/big/index'
+  '/big/index',
+  '/phone/tPhoneVisitorAdd',
+  '/phone/tPhoneVisitor/add'
 
 ]
 
