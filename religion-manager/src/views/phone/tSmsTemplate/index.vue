@@ -1,29 +1,23 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="手机号前7位" prop="number">
+      <el-form-item label="名称" prop="name">
         <el-input
-          v-model="queryParams.number"
-          placeholder="请输入手机号前7位"
+          v-model="queryParams.name"
+          placeholder="请输入名称"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="省份" prop="province">
-        <el-input
-          v-model="queryParams.province"
-          placeholder="请输入省份"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="市" prop="city">
-        <el-input
-          v-model="queryParams.city"
-          placeholder="请输入市"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+      <el-form-item label="状态" prop="status">
+        <el-select v-model="queryParams.status" placeholder="请选择状态" clearable>
+          <el-option
+            v-for="dict in dict.type.global_status"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -39,7 +33,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['phone:tPhoneNumber:add']"
+          v-hasPermi="['phone:tSmsTemplate:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -50,7 +44,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['phone:tPhoneNumber:edit']"
+          v-hasPermi="['phone:tSmsTemplate:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -61,7 +55,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['phone:tPhoneNumber:remove']"
+          v-hasPermi="['phone:tSmsTemplate:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -71,17 +65,22 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['phone:tPhoneNumber:export']"
+          v-hasPermi="['phone:tSmsTemplate:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="tPhoneNumberList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="tSmsTemplateList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="手机号前7位" align="center" prop="number" />
-      <el-table-column label="省份" align="center" prop="province" />
-      <el-table-column label="市" align="center" prop="city" />
+      <el-table-column label="短信模版id" align="center" prop="id" />
+      <el-table-column label="名称" align="center" prop="name" />
+      <el-table-column label="内容" align="center" prop="content" />
+      <el-table-column label="状态" align="center" prop="status">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.global_status" :value="scope.row.status"/>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -89,14 +88,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['phone:tPhoneNumber:edit']"
+            v-hasPermi="['phone:tSmsTemplate:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['phone:tPhoneNumber:remove']"
+            v-hasPermi="['phone:tSmsTemplate:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -110,17 +109,23 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改手机管理对话框 -->
+    <!-- 添加或修改短信模版对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="手机号前7位" prop="number">
-          <el-input v-model="form.number" placeholder="请输入手机号前7位" />
+        <el-form-item label="名称" prop="name">
+          <el-input v-model="form.name" placeholder="请输入名称" />
         </el-form-item>
-        <el-form-item label="省份" prop="province">
-          <el-input v-model="form.province" placeholder="请输入省份" />
+        <el-form-item label="内容">
+          <editor v-model="form.content" :min-height="192"/>
         </el-form-item>
-        <el-form-item label="市" prop="city">
-          <el-input v-model="form.city" placeholder="请输入市" />
+        <el-form-item label="状态">
+          <el-radio-group v-model="form.status">
+            <el-radio
+              v-for="dict in dict.type.global_status"
+              :key="dict.value"
+:label="parseInt(dict.value)"
+            >{{dict.label}}</el-radio>
+          </el-radio-group>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -132,10 +137,11 @@
 </template>
 
 <script>
-import { listTPhoneNumber, getTPhoneNumber, delTPhoneNumber, addTPhoneNumber, updateTPhoneNumber } from "@/api/phone/tPhoneNumber";
+import { listTSmsTemplate, getTSmsTemplate, delTSmsTemplate, addTSmsTemplate, updateTSmsTemplate } from "@/api/phone/tSmsTemplate";
 
 export default {
-  name: "TPhoneNumber",
+  name: "TSmsTemplate",
+  dicts: ['global_status'],
   data() {
     return {
       // 遮罩层
@@ -150,8 +156,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 手机管理表格数据
-      tPhoneNumberList: [],
+      // 短信模版表格数据
+      tSmsTemplateList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -160,15 +166,23 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        number: null,
-        province: null,
-        city: null,
-        status: null,
+        name: null,
+        content: null,
+        status: null
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
+        name: [
+          { required: true, message: "名称不能为空", trigger: "blur" }
+        ],
+        content: [
+          { required: true, message: "内容不能为空", trigger: "blur" }
+        ],
+        status: [
+          { required: true, message: "请选择状态", trigger: "blur" }
+        ],
       }
     };
   },
@@ -176,11 +190,11 @@ export default {
     this.getList();
   },
   methods: {
-    /** 查询手机管理列表 */
+    /** 查询短信模版列表 */
     getList() {
       this.loading = true;
-      listTPhoneNumber(this.queryParams).then(response => {
-        this.tPhoneNumberList = response.rows;
+      listTSmsTemplate(this.queryParams).then(response => {
+        this.tSmsTemplateList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
@@ -193,11 +207,10 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        number: null,
-        province: null,
-        city: null,
-        status: 0,
-        id: null
+        id: null,
+        name: null,
+        content: null,
+        status: 0
       };
       this.resetForm("form");
     },
@@ -221,16 +234,16 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加手机管理";
+      this.title = "添加短信模版";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids
-      getTPhoneNumber(id).then(response => {
+      getTSmsTemplate(id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改手机管理";
+        this.title = "修改短信模版";
       });
     },
     /** 提交按钮 */
@@ -238,13 +251,13 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != null) {
-            updateTPhoneNumber(this.form).then(response => {
+            updateTSmsTemplate(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addTPhoneNumber(this.form).then(response => {
+            addTSmsTemplate(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -256,8 +269,8 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除手机管理编号为"' + ids + '"的数据项？').then(function() {
-        return delTPhoneNumber(ids);
+      this.$modal.confirm('是否确认删除短信模版编号为"' + ids + '"的数据项？').then(function() {
+        return delTSmsTemplate(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -265,9 +278,9 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('phone/tPhoneNumber/export', {
+      this.download('phone/tSmsTemplate/export', {
         ...this.queryParams
-      }, `tPhoneNumber_${new Date().getTime()}.xlsx`)
+      }, `tSmsTemplate_${new Date().getTime()}.xlsx`)
     }
   }
 };

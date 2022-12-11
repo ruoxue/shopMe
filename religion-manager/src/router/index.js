@@ -149,6 +149,23 @@ export const dynamicRoutes = [
       }
     ]
   },
+  
+  {
+    path: '/phone/sms-detail',
+    component: Layout,
+    hidden: true,
+    permissions: ['phone:tSmsDetail:list'],
+    children: [
+      {
+        path: 'index/:taskId(\\d+)',
+        component: () => import('@/views/phone/tSmsDetail/index'),
+        name: 'Data',
+        meta: { title: '任务详情', activeMenu: '/phone/tPhoneTask' }
+      }
+    ]
+  },
+  
+  
   {
     path: '/monitor/job-log',
     component: Layout,
