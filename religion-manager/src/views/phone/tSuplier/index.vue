@@ -27,22 +27,8 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="信息" prop="info">
-        <el-input
-          v-model="queryParams.info"
-          placeholder="请输入信息"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="" prop="url">
-        <el-input
-          v-model="queryParams.url"
-          placeholder="请输入"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+     
+     
       <el-form-item label="归属号" prop="extno">
         <el-input
           v-model="queryParams.extno"
@@ -67,14 +53,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="余额" prop="balance">
-        <el-input
-          v-model="queryParams.balance"
-          placeholder="请输入余额"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+   
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -139,7 +118,7 @@
       </el-table-column>
       <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="信息" align="center" prop="info" />
-      <el-table-column label="" align="center" prop="url" />
+      <el-table-column label="url" align="center" prop="url" />
       <el-table-column label="归属号" align="center" prop="extno" />
       <el-table-column label="最多" align="center" prop="max" />
       <el-table-column label="账号" align="center" prop="account" />
@@ -178,8 +157,14 @@
         <el-form-item label="名称" prop="name">
           <el-input v-model="form.name" placeholder="请输入名称" />
         </el-form-item>
+        <el-form-item label="账号" prop="account">
+          <el-input v-model="form.account" placeholder="请输入账号" />
+        </el-form-item>
         <el-form-item label="密码" prop="pwd">
           <el-input v-model="form.pwd" placeholder="请输入密码" />
+        </el-form-item>
+        <el-form-item label="余额" prop="balance">
+          <el-input v-model="form.balance" placeholder="请输入余额" />
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="form.status">
@@ -190,23 +175,22 @@
             >{{dict.label}}</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" placeholder="请输入备注" />
-        </el-form-item>
-        <el-form-item label="信息" prop="info">
-          <el-input v-model="form.info" placeholder="请输入信息" />
-        </el-form-item> 
+      <el-form-item label="url" prop="url">
+        <el-input v-model="form.url" placeholder="请输入url" />
+      </el-form-item>
         <el-form-item label="归属号" prop="extno">
           <el-input v-model="form.extno" placeholder="请输入归属号" />
         </el-form-item>
         <el-form-item label="最多" prop="max">
           <el-input v-model="form.max" placeholder="请输入最多" />
         </el-form-item>
-        <el-form-item label="账号" prop="account">
-          <el-input v-model="form.account" placeholder="请输入账号" />
+
+
+        <el-form-item label="备注" prop="remark">
+          <el-input v-model="form.remark" placeholder="请输入备注" />
         </el-form-item>
-        <el-form-item label="余额" prop="balance">
-          <el-input v-model="form.balance" placeholder="请输入余额" />
+        <el-form-item label="信息" prop="info">
+          <el-input v-model="form.info" placeholder="请输入信息" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
